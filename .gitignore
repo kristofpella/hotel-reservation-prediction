@@ -1,0 +1,6 @@
+venv/
+mlruns/
+logs/
+project_hotel_reservation.egg-info/
+*.json
+grand-principle-480715-v1-f1615a953031.json

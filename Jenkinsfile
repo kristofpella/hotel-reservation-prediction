@@ -51,9 +51,15 @@ pipeline{
 
                         gcloud auth configure-docker --quiet
 
-                        docker build --secret id=gcp-key,src=${GOOGLE_APPLICATION_CREDENTIALS} -t gcr.io/${GCP_PROJECT}/ml-project:latest .
-
-                        docker push gcr.io/${GCP_PROJECT}/ml-project:latest 
+                        # Copy credentials file to workspace for gcloud builds submit
+                        cp ${GOOGLE_APPLICATION_CREDENTIALS} grand-principle-480715-v1-f1615a953031.json
+                        
+                        # Use gcloud builds submit to build and push (avoids Docker API version issues)
+                        # This builds in Cloud Build and pushes directly to GCR
+                        gcloud builds submit --tag gcr.io/${GCP_PROJECT}/ml-project:latest .
+                        
+                        # Clean up credentials file
+                        rm -f grand-principle-480715-v1-f1615a953031.json 
 
                         '''
                     }

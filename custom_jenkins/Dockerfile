@@ -19,9 +19,8 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 RUN groupadd -f docker && \
     usermod -aG docker jenkins
 
-# Create the Docker directory and volume for DinD
-RUN mkdir -p /var/lib/docker
-VOLUME /var/lib/docker
+# Ensure proper permissions for Docker socket (will be mounted from host)
+RUN chown root:docker /var/run/docker.sock 2>/dev/null || true
 
 # Switch back to the Jenkins user
 USER jenkins

@@ -21,7 +21,9 @@ COPY . .
 RUN pip install --no-cache-dir -e .
 
 # Train the model before running the application
-RUN python pipeline/training_pipeline.py
+# Use BuildKit secret to pass GCP credentials
+RUN --mount=type=secret,id=gcp-key,target=/app/grand-principle-480715-v1-f1615a953031.json \
+    python pipeline/training_pipeline.py
 
 # Expose the port that Flask will run on
 EXPOSE 5000

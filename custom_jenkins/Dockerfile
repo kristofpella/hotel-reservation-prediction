@@ -15,12 +15,16 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
     apt-get install -y docker-ce docker-ce-cli containerd.io && \
     apt-get clean
 
-# Add Jenkins user to the Docker group (create if it doesn't exist)
+# Copy the entrypoint script that will fix Docker socket permissions
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Add Jenkins user to the Docker group (will be adjusted at runtime if needed)
 RUN groupadd -f docker && \
     usermod -aG docker jenkins
 
-# Ensure proper permissions for Docker socket (will be mounted from host)
-RUN chown root:docker /var/run/docker.sock 2>/dev/null || true
+# Set the entrypoint (will run as root initially to fix permissions)
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-# Switch back to the Jenkins user
-USER jenkins
+# Note: We stay as root here because the entrypoint needs root to fix permissions
+# The Jenkins entrypoint script will switch to jenkins user automatically

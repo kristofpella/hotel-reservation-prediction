@@ -16,10 +16,10 @@ pipeline{
             steps{
                 script{
                     echo 'Cloning Github repo to Jenkins............'
-                    withCredentials([string(credentialsId: 'github-token', variable: 'GIT_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         sh '''
                         rm -rf * .[^.]* || true
-                        git clone -b main https://x:${GIT_TOKEN}@github.com/kristofpella/hotel-reservation-prediction.git .
+                        git clone -b main https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/kristofpella/hotel-reservation-prediction.git .
                         '''
                     }
                 }

@@ -46,9 +46,9 @@ pipeline {
 
                         gcloud auth configure-docker --quiet
 
-                        /usr/local/bin/docker-wrapper.sh build -t gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction .
+                        sudo docker build -t gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction .
 
-                        /usr/local/bin/docker-wrapper.sh push gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction
+                        sudo docker push gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction
                         '''
                     }
                 }

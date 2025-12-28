@@ -15,8 +15,10 @@ RUN apt-get update -y && \
     apt-get install -y docker-ce docker-ce-cli containerd.io && \
     apt-get clean
 
-# Add Jenkins user to the Docker group (create if it doesn't exist)
-RUN groupadd -f docker && \
+# Add Jenkins user to the Docker group
+# Create docker group if it doesn't exist, or use existing one
+# The GID will be matched at runtime using --group-add flag
+RUN (getent group docker || groupadd docker) && \
     usermod -aG docker jenkins
 
 # Create the Docker directory and volume for DinD

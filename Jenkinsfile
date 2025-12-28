@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        VENV_DIR = 'venv',
-        GCP_PROJECT_ID = 'grand-principle-480715-v1',
+        VENV_DIR = 'venv'
+        GCP_PROJECT_ID = 'grand-principle-480715-v1'
         GCLOUD_PATH = 'var/jenkins_home/google-cloud-sdk/bin'
     }
 
@@ -38,7 +38,7 @@ pipeline {
                     script {
                         echo 'Building and Pushing Docker Image to GCR...............'
                         sh '''
-                        export PATH = $PATH:$(GCLOUD_PATH)
+                        export PATH=$PATH:${GCLOUD_PATH}
 
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
 

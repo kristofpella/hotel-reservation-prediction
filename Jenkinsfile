@@ -38,7 +38,7 @@ pipeline {
                     script {
                         echo 'Building and Pushing Docker Image to GCR...............'
                         sh '''
-                        export PATH=$PATH:${GCLOUD_PATH}
+                        export PATH=$PATH:${GCLOUD_PATH}:/usr/local/bin
 
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
 
@@ -46,9 +46,9 @@ pipeline {
 
                         gcloud auth configure-docker --quiet
 
-                        docker build -t gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction .
+                        docker-wrapper.sh build -t gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction .
 
-                        docker push gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction
+                        docker-wrapper.sh push gcr.io/${GCP_PROJECT_ID}/hotel-reservation-prediction
                         '''
                     }
                 }

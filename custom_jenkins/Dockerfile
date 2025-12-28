@@ -28,14 +28,16 @@ RUN apt-get update -y && \
     apt-get clean
 
 # Create docker wrapper script that uses sudo if needed
-RUN echo '#!/bin/bash\n\
-if [ -w /var/run/docker.sock ] 2>/dev/null; then\n\
-    exec /usr/bin/docker "$@"\n\
-else\n\
-    exec sudo /usr/bin/docker "$@"\n\
-fi' > /usr/local/bin/docker-wrapper.sh && \
+RUN cat > /usr/local/bin/docker-wrapper.sh << 'EOF' && \
     chmod +x /usr/local/bin/docker-wrapper.sh && \
     chown jenkins:jenkins /usr/local/bin/docker-wrapper.sh
+#!/bin/bash
+if [ -w /var/run/docker.sock ] 2>/dev/null; then
+    exec /usr/bin/docker "$@"
+else
+    exec sudo /usr/bin/docker "$@"
+fi
+EOF
 
 # Create the Docker directory and volume for DinD
 RUN mkdir -p /var/lib/docker

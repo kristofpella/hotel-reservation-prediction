@@ -51,6 +51,9 @@ pipeline{
 
                         gcloud auth configure-docker --quiet
 
+                        # Enable Cloud Build API if not already enabled
+                        gcloud services enable cloudbuild.googleapis.com --project=${GCP_PROJECT} || echo "Cloud Build API may already be enabled or enabling..."
+
                         # Copy credentials file to workspace for gcloud builds submit
                         cp ${GOOGLE_APPLICATION_CREDENTIALS} grand-principle-480715-v1-f1615a953031.json
                         

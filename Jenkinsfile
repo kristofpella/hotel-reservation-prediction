@@ -1,6 +1,10 @@
 pipeline{
     agent any
 
+    options {
+        skipDefaultCheckout true
+    }
+
     environment {
         VENV_DIR = 'venv'
         GCP_PROJECT = "grand-principle-480715-v1"

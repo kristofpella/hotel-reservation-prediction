@@ -16,7 +16,12 @@ pipeline{
             steps{
                 script{
                     echo 'Cloning Github repo to Jenkins............'
-                    checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/kristofpella/hotel-reservation-prediction.git']])
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GIT_TOKEN')]) {
+                        sh '''
+                        rm -rf * .[^.]* || true
+                        git clone -b main https://x:${GIT_TOKEN}@github.com/kristofpella/hotel-reservation-prediction.git .
+                        '''
+                    }
                 }
             }
         }

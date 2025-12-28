@@ -33,6 +33,12 @@ pipeline {
         }
 
         stage('Building and Pushing Docker Image to GCR') {
+            agent {
+                docker {
+                    image 'google/cloud-sdk:latest'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
+                }
+            }
             steps {
                 withCredentials([file(credentialsId: '7707bcf0-8da0-40ca-bb65-0574130b2dd5', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]){
                     script {
